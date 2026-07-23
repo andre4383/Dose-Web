@@ -6,11 +6,18 @@ import { StatsRow } from '@/components/stats-row';
 import { MedicationsList } from '@/components/medications-list';
 
 export default function HomePage() {
-  const { today, medsQuery, statsQuery, activeMeds, isTaken, toggle } =
-    useToday();
+  const {
+    today,
+    medsQuery,
+    statsQuery,
+    activeMeds,
+    isTaken,
+    toggle,
+    takeNow,
+  } = useToday();
 
   return (
-    <main className="mx-auto w-full max-w-2xl p-6 space-y-6">
+    <main className="mx-auto w-full max-w-md sm:max-w-2xl px-5 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-10">
       <TodayHeader date={today} />
       <StatsRow stats={statsQuery.data} />
       <MedicationsList
@@ -19,6 +26,7 @@ export default function HomePage() {
         error={medsQuery.error}
         isTaken={isTaken}
         onToggle={toggle}
+        onTakeNow={takeNow}
       />
     </main>
   );

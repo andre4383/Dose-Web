@@ -1,4 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card';
 import { Medication } from '@/lib/api';
 import { MedicationCard } from './medication-card';
 
@@ -8,6 +7,7 @@ type Props = {
   error: Error | null;
   isTaken: (medId: string, time: string) => boolean;
   onToggle: (medId: string, time: string) => void;
+  onTakeNow: (medId: string) => void;
 };
 
 export function MedicationsList({
@@ -16,36 +16,40 @@ export function MedicationsList({
   error,
   isTaken,
   onToggle,
+  onTakeNow,
 }: Props) {
-  if (isLoading) {
-    return <p className="text-sm text-muted-foreground">Carregando…</p>;
-  }
-  if (error) {
-    return (
-      <p className="text-sm text-destructive">
-        Erro ao carregar remédios. API rodando em `localhost:3000`?
-      </p>
-    );
-  }
-  if (meds.length === 0) {
-    return (
-      <Card>
-        <CardContent className="py-8 text-center text-muted-foreground">
-          Nenhum remédio cadastrado ainda.
-        </CardContent>
-      </Card>
-    );
-  }
   return (
-    <div className="space-y-3">
-      {meds.map((m) => (
-        <MedicationCard
-          key={m.id}
-          med={m}
-          isTaken={isTaken}
-          onToggle={onToggle}
-        />
-      ))}
-    </div>
+    <section className="space-y-3">
+      <h2 className="text-xl sm:text-2xl font-semibold">Remédios de hoje</h2>
+
+      {isLoading && (
+        <p className="text-sm text-muted-foreground">Carregando…</p>
+      )}
+
+      {error && (
+        <p className="text-sm text-destructive">
+          Erro ao carregar. API rodando em <code>localhost:3000</code>?
+        </p>
+      )}
+
+      {!isLoading && !error && meds.length === 0 && (
+        <div className="rounded-3xl border border-dashed border-border p-8 text-center text-muted-foreground">
+          Nenhum remédio cadastrado ainda.
+        </div>
+      )}
+
+      <div className="space-y-3">
+        {meds.map((m, i) => (
+          <MedicationCard
+            key={m.id}
+            med={m}
+            colorIndex={i}
+            isTaken={isTaken}
+            onToggle={onToggle}
+            onTakeNow={onTakeNow}
+          />
+        ))}
+      </div>
+    </section>
   );
 }

@@ -78,6 +78,18 @@ export function useToday() {
     else mark.mutate({ medId, time });
   };
 
+  const takeNow = (medId: string) => {
+    const med = activeMeds.find((m) => m.id === medId);
+    if (!med) return;
+    const sortedTimes = [...med.times].sort();
+    const pending = sortedTimes.find((t) => !isTaken(medId, t));
+    if (!pending) {
+      toast.info('Todos os horários de hoje já foram marcados');
+      return;
+    }
+    mark.mutate({ medId, time: pending });
+  };
+
   return {
     today,
     medsQuery,
@@ -85,5 +97,6 @@ export function useToday() {
     activeMeds,
     isTaken,
     toggle,
+    takeNow,
   };
 }

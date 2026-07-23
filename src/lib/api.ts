@@ -38,6 +38,10 @@ export type DoseLog = {
   createdAt: string;
 };
 
+export type DoseLogWithMed = DoseLog & {
+  medication: { id: string; name: string; dosage: string };
+};
+
 export type Prescription = {
   id: string;
   issuedAt: string;
@@ -124,4 +128,13 @@ export const api = {
   calendar: (month: string) =>
     request<Calendar>(`/calendar?month=${month}`),
   stats: () => request<Stats>('/stats'),
+  logs: {
+    list: (from?: string, to?: string) => {
+      const qs = new URLSearchParams();
+      if (from) qs.set('from', from);
+      if (to) qs.set('to', to);
+      const q = qs.toString();
+      return request<DoseLogWithMed[]>(`/logs${q ? `?${q}` : ''}`);
+    },
+  },
 };
