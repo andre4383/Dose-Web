@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils';
 
 const LINKS = [
   { href: '/', label: 'Hoje', icon: Home },
-  { href: '/remedios', label: 'Remédios', icon: Pill },
   { href: '/historico', label: 'Histórico', icon: History },
   { href: '/calendario', label: 'Calendário', icon: Calendar },
+  { href: '/remedios', label: 'Remédios', icon: Pill },
 ];
 
 export function NavBar() {
