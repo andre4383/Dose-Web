@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MedicationForm } from '@/components/medication-form';
@@ -24,42 +23,7 @@ export default function RemediosPage() {
 
   const meds = listQuery.data ?? [];
 
-  const rootRef = useRef<HTMLElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef(new Map<string, HTMLLIElement>());
-
-  useGSAP(
-    () => {
-      gsap.from('[data-anim="header"]', {
-        opacity: 0,
-        y: -16,
-        duration: 0.5,
-        ease: 'power2.out',
-      });
-      gsap.from('[data-anim="new-btn"]', {
-        opacity: 0,
-        scale: 0.85,
-        duration: 0.4,
-        delay: 0.15,
-        ease: 'back.out(1.7)',
-      });
-    },
-    { scope: rootRef },
-  );
-
-  useGSAP(
-    () => {
-      if (!meds.length) return;
-      gsap.from('[data-anim="med-item"]', {
-        opacity: 0,
-        y: 20,
-        duration: 0.45,
-        stagger: 0.07,
-        ease: 'power3.out',
-      });
-    },
-    { scope: listRef, dependencies: [meds.length] },
-  );
 
   const openCreate = () => {
     setEditing(null);
@@ -103,27 +67,22 @@ export default function RemediosPage() {
   const isSubmitting = create.isPending || update.isPending;
 
   return (
-    <main
-      ref={rootRef}
-      className="mx-auto w-full max-w-md sm:max-w-2xl px-5 sm:px-6 py-8 sm:py-12 space-y-8"
-    >
-      <header
-        data-anim="header"
-        className="flex items-end justify-between gap-4"
-      >
-        <div className="space-y-2">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+    <main className="mx-auto w-full max-w-2xl px-5 sm:px-8 py-10 sm:py-16 space-y-10">
+      <header className="flex items-end justify-between gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+        <div className="space-y-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
             Cadastro
           </p>
-          <h1 className="text-4xl sm:text-5xl font-semibold leading-[1.05]">
+          <h1
+            className="text-4xl sm:text-5xl font-semibold leading-[0.95] tracking-tight"
+            style={{ fontFamily: 'var(--font-fraunces), serif' }}
+          >
             Remédios
           </h1>
         </div>
         <Button
-          data-anim="new-btn"
           onClick={openCreate}
-          className="rounded-full"
-          size="lg"
+          className="rounded-full h-11 px-5 shadow-sm hover:shadow"
         >
           <Plus /> Novo
         </Button>
@@ -138,51 +97,64 @@ export default function RemediosPage() {
         </p>
       )}
       {!listQuery.isLoading && meds.length === 0 && (
-        <div className="rounded-3xl border border-dashed border-border p-8 text-center text-muted-foreground">
-          Nenhum remédio cadastrado ainda.
+        <div className="rounded-3xl border border-dashed border-border/70 p-12 text-center space-y-2">
+          <p className="text-foreground/70 font-medium">
+            Nenhum remédio cadastrado
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Clique em "Novo" pra começar.
+          </p>
         </div>
       )}
 
-      <ul ref={listRef} className="space-y-3">
+      <ul className="space-y-3">
         {meds.map((med, i) => (
           <li
             key={med.id}
-            data-anim="med-item"
             ref={(el) => {
               if (el) itemRefs.current.set(med.id, el);
               else itemRefs.current.delete(med.id);
             }}
             className={cn(
-              'rounded-2xl border border-black/5 p-4 flex items-start justify-between gap-3',
+              'group relative rounded-3xl border border-black/[0.04] px-6 py-5 flex items-center gap-4 transition-shadow hover:shadow-md/40 animate-in fade-in slide-in-from-bottom-2 duration-400',
               PALETTE[i % PALETTE.length],
             )}
+            style={{ animationDelay: `${i * 60}ms`, animationFillMode: 'both' }}
           >
-            <div className="min-w-0 space-y-1">
+            <div className="min-w-0 flex-1 space-y-1">
               <div className="flex items-center gap-2">
-                <p className="font-semibold text-foreground truncate">
+                <h3
+                  className="text-lg font-semibold text-foreground truncate leading-tight"
+                  style={{ fontFamily: 'var(--font-fraunces), serif' }}
+                >
                   {med.name}
-                </p>
+                </h3>
                 {!med.active && (
-                  <span className="text-[10px] uppercase tracking-wider bg-background/60 text-foreground/70 rounded-full px-2 py-0.5">
+                  <span className="text-[9px] uppercase tracking-[0.15em] font-medium bg-background/70 text-foreground/60 rounded-full px-2 py-0.5">
                     Inativo
                   </span>
                 )}
               </div>
-              <p className="text-sm text-foreground/70">
-                {med.dosage} · {[...med.times].sort().join(', ')}
+              <p className="text-sm text-foreground/60">
+                <span className="font-medium text-foreground/80">
+                  {med.dosage}
+                </span>
+                <span className="mx-2 text-foreground/30">·</span>
+                {[...med.times].sort().join(' · ')}
               </p>
               {med.notes && (
-                <p className="text-xs text-foreground/60 italic truncate">
+                <p className="text-xs text-foreground/50 italic truncate pt-0.5">
                   {med.notes}
                 </p>
               )}
             </div>
-            <div className="shrink-0 flex items-center gap-1">
+            <div className="shrink-0 flex items-center gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
               <Button
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => openEdit(med)}
                 aria-label="Editar"
+                className="hover:bg-background/60 text-foreground/70 hover:text-foreground"
               >
                 <Pencil />
               </Button>
@@ -192,7 +164,7 @@ export default function RemediosPage() {
                 onClick={() => handleRemove(med)}
                 disabled={remove.isPending}
                 aria-label="Remover"
-                className="text-destructive hover:text-destructive"
+                className="hover:bg-destructive/10 text-foreground/50 hover:text-destructive"
               >
                 <Trash2 />
               </Button>

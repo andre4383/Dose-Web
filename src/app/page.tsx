@@ -1,8 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { useToday } from '@/hooks/use-today';
 import { TodayHeader } from '@/components/today-header';
 import { StatsRow } from '@/components/stats-row';
@@ -19,52 +16,24 @@ export default function HomePage() {
     takeNow,
   } = useToday();
 
-  const rootRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.from('[data-anim="today-header"]', { opacity: 0, y: -16, duration: 0.5 })
-        .from(
-          '[data-anim="stat-card"]',
-          { opacity: 0, y: 12, duration: 0.4, stagger: 0.08 },
-          '-=0.2',
-        );
-    },
-    { scope: rootRef },
-  );
-
-  useGSAP(
-    () => {
-      if (!activeMeds.length) return;
-      gsap.from('[data-anim="med-card"]', {
-        opacity: 0,
-        y: 20,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power3.out',
-      });
-    },
-    { scope: rootRef, dependencies: [activeMeds.length] },
-  );
-
   return (
-    <main
-      ref={rootRef}
-      className="mx-auto w-full max-w-md sm:max-w-2xl px-5 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-10"
-    >
-      <div data-anim="today-header">
+    <main className="mx-auto w-full max-w-2xl px-5 sm:px-8 py-10 sm:py-16 space-y-10 sm:space-y-12">
+      <div className="animate-in fade-in slide-in-from-top-2 duration-500">
         <TodayHeader date={today} />
       </div>
-      <StatsRow stats={statsQuery.data} />
-      <MedicationsList
-        meds={activeMeds}
-        isLoading={medsQuery.isLoading}
-        error={medsQuery.error}
-        isTaken={isTaken}
-        onToggle={toggle}
-        onTakeNow={takeNow}
-      />
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100 fill-mode-both">
+        <StatsRow stats={statsQuery.data} />
+      </div>
+      <div className="animate-in fade-in duration-500 delay-200 fill-mode-both">
+        <MedicationsList
+          meds={activeMeds}
+          isLoading={medsQuery.isLoading}
+          error={medsQuery.error}
+          isTaken={isTaken}
+          onToggle={toggle}
+          onTakeNow={takeNow}
+        />
+      </div>
     </main>
   );
 }

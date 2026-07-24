@@ -47,16 +47,16 @@ function NavLink({
 export function NavBar() {
   const pathname = usePathname();
   return (
-    <nav className="sticky top-0 z-30 backdrop-blur bg-background/85 border-b border-border/50">
-      <div className="w-full px-5 sm:px-6 h-14 flex items-center gap-3">
+    <nav className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/40">
+      <div className="mx-auto w-full max-w-5xl px-5 sm:px-8 h-16 flex items-center gap-4">
         <Link
           href="/"
-          className="text-lg font-semibold tracking-tight"
+          className="text-xl font-semibold tracking-tight"
           style={{ fontFamily: 'var(--font-fraunces), serif' }}
         >
           Dose
         </Link>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           {MAIN_LINKS.map((l) => (
             <NavLink key={l.href} {...l} active={pathname === l.href} />
           ))}

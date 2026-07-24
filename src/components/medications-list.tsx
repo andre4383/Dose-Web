@@ -19,8 +19,13 @@ export function MedicationsList({
   onTakeNow,
 }: Props) {
   return (
-    <section className="space-y-3">
-      <h2 className="text-xl sm:text-2xl font-semibold">Remédios de hoje</h2>
+    <section className="space-y-4">
+      <h2
+        className="text-2xl sm:text-3xl font-semibold tracking-tight"
+        style={{ fontFamily: 'var(--font-fraunces), serif' }}
+      >
+        Remédios de hoje
+      </h2>
 
       {isLoading && (
         <p className="text-sm text-muted-foreground">Carregando…</p>
