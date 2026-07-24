@@ -13,7 +13,6 @@ export default function HomePage() {
     activeMeds,
     isTaken,
     toggle,
-    takeNow,
   } = useToday();
 
   return (
@@ -31,7 +30,6 @@ export default function HomePage() {
           error={medsQuery.error}
           isTaken={isTaken}
           onToggle={toggle}
-          onTakeNow={takeNow}
         />
       </div>
     </main>
