@@ -33,6 +33,7 @@ export function MedicationCard({
 
   return (
     <article
+      data-anim="med-card"
       className={cn(
         'rounded-3xl p-5 sm:p-6 shadow-sm/40 border border-black/5',
         bg,

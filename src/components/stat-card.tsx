@@ -7,7 +7,10 @@ type Props = {
 
 export function StatCard({ icon, label, value, suffix }: Props) {
   return (
-    <div className="rounded-2xl bg-card border border-border/60 p-3 sm:p-4 flex flex-col gap-2">
+    <div
+      data-anim="stat-card"
+      className="rounded-2xl bg-card border border-border/60 p-3 sm:p-4 flex flex-col gap-2"
+    >
       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
         {icon}
         <span>{label}</span>
