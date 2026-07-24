@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Calendar, History, Home } from 'lucide-react';
+import { Calendar, History, Home, Pill } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const LINKS = [
   { href: '/', label: 'Hoje', icon: Home },
+  { href: '/remedios', label: 'Remédios', icon: Pill },
   { href: '/historico', label: 'Histórico', icon: History },
   { href: '/calendario', label: 'Calendário', icon: Calendar },
 ];
